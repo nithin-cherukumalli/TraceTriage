@@ -1,0 +1,2904 @@
+{
+  "corpus": "inspection_40",
+  "note": "This is the complete input to the diagnostic agent. No mechanism, no failure step, no family, no probe-gated field. Everything else costs a probe.",
+  "cases": [
+    {
+      "trace_id": "case-00000",
+      "task": "handle the customer refund request for order A-1000",
+      "final_result": "Your refund has been processed.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1000"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1000",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1000",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00001",
+      "task": "handle the customer refund request for order A-1001",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1001"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1001"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1001",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 8,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1001",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 9,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00002",
+      "task": "handle the customer refund request for order A-1002",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1002"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1002",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1002",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00003",
+      "task": "handle the customer refund request for order A-1003",
+      "final_result": "Your refund has been processed.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1003"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1003",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "interpret the eligibility result",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1003",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00004",
+      "task": "handle the customer refund request for order A-1004",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1004"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1004"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1004",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 8,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1004",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 9,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00005",
+      "task": "handle the customer refund request for order A-1005",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1005"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1005"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1005",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1005",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00006",
+      "task": "handle the customer refund request for order A-1006",
+      "final_result": "This order is not eligible for a refund.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1006"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1006",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1006",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00007",
+      "task": "handle the customer refund request for order A-1007",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1007"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1007",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1007",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00008",
+      "task": "handle the customer refund request for order A-1008",
+      "final_result": "I could not finish this request.",
+      "final_error": "tool_error",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1008"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1008",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order": "A-1008",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00009",
+      "task": "handle the customer refund request for order A-1009",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1009"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1009"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1009",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1009",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00010",
+      "task": "handle the customer refund request for order A-1010",
+      "final_result": "Your refund has been processed.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1010"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1010",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "interpret the eligibility result",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1010"
+          }
+        },
+        {
+          "index": 8,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1010",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 9,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00011",
+      "task": "handle the customer refund request for order A-1011",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1011"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1011",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1011",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response that contradicts the recorded refund",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00012",
+      "task": "handle the customer refund request for order A-1012",
+      "final_result": "I could not finish this request.",
+      "final_error": "tool_error",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1012"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1012",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order": "A-1012",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00013",
+      "task": "handle the customer refund request for order A-1013",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1013"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call notify_customer",
+          "tool_name": "notify_customer",
+          "tool_arguments": {
+            "order_id": "A-1013",
+            "message": "checking your refund eligibility"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1013",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00014",
+      "task": "handle the customer refund request for order A-1014",
+      "final_result": "I could not finish this request.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1014"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1014",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1014"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order": "A-1014",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00015",
+      "task": "handle the customer refund request for order A-1015",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1015"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1015",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1015"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order": "A-1015",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00016",
+      "task": "handle the customer refund request for order A-1016",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1016"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1016",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1016",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00017",
+      "task": "handle the customer refund request for order A-1017",
+      "final_result": "This order is not eligible for a refund.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1017"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1017"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1017",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 8,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1017",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 9,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00018",
+      "task": "handle the customer refund request for order A-1018",
+      "final_result": "I could not finish this request.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1018"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1018",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1018",
+            "amount": "45.00"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00019",
+      "task": "handle the customer refund request for order A-1019",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1019"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call notify_customer",
+          "tool_name": "notify_customer",
+          "tool_arguments": {
+            "order_id": "A-1019",
+            "message": "checking your refund eligibility"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1019",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00020",
+      "task": "handle the customer refund request for order A-1020",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1020"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1020",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1020",
+            "amount": "45.00"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00021",
+      "task": "handle the customer refund request for order A-1021",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1021"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1021",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1021"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1021",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00022",
+      "task": "handle the customer refund request for order A-1022",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1022"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1022",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1022",
+            "amount": "45.00"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00023",
+      "task": "handle the customer shipping delay complaint for order A-1023",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1023"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1023"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1023"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1023",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1023",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00024",
+      "task": "handle the customer refund request for order A-1024",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "tool_error",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1024"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1024",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1024",
+            "amount": "45.00"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00025",
+      "task": "handle the customer refund request for order A-1025",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1025"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1025",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1025",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00026",
+      "task": "handle the customer refund request for order A-1026",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1026"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1026",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1026",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response that contradicts the recorded refund",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00027",
+      "task": "handle the customer refund request for order A-1027",
+      "final_result": "Your refund has been processed.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1027"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1027",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1027"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1027"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1027",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response that contradicts the recorded refund",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00028",
+      "task": "handle the customer refund request for order A-1028",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1028"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1028",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1028",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 5,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00029",
+      "task": "handle the customer shipping delay complaint for order A-1029",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1029"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1029",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1029",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00030",
+      "task": "handle the customer refund request for order A-1030",
+      "final_result": "I have updated your order.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1030"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1030",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "interpret the eligibility result",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1030"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1030",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00031",
+      "task": "handle the customer shipping delay complaint for order A-1031",
+      "final_result": "This order is not eligible for a refund.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1031"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1031",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1031",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00032",
+      "task": "handle the customer refund request for order A-1032",
+      "final_result": "Unable to complete the refund.",
+      "final_error": "tool_error",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1032"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1032",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1032",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00033",
+      "task": "handle the customer shipping delay complaint for order A-1033",
+      "final_result": "I could not finish this request.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1033"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1033"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1033",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1033",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00034",
+      "task": "handle the customer refund request for order A-1034",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1034"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call notify_customer",
+          "tool_name": "notify_customer",
+          "tool_arguments": {
+            "order_id": "A-1034",
+            "message": "checking your refund eligibility"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1034"
+          }
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1034",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00035",
+      "task": "handle the customer refund request for order A-1035",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1035"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call notify_customer",
+          "tool_name": "notify_customer",
+          "tool_arguments": {
+            "order_id": "A-1035",
+            "message": "checking your refund eligibility"
+          }
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1035"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 7,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1035",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 8,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00036",
+      "task": "handle the customer refund request for order A-1036",
+      "final_result": "I could not finish this request.",
+      "final_error": "task_incomplete",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1036"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1036",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1036",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response that contradicts the recorded refund",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00037",
+      "task": "handle the customer refund request for order A-1037",
+      "final_result": "I could not finish this request.",
+      "final_error": "refund_failed",
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1037"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "assess eligibility",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "retrieval",
+          "summary": "retrieve shipping information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1037",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1037",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00038",
+      "task": "handle the customer refund request for order A-1038",
+      "final_result": "Your refund has been processed.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1038"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1038",
+            "days_since_purchase": 95
+          }
+        },
+        {
+          "index": 4,
+          "kind": "reflect",
+          "summary": "interpret the eligibility result",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call fetch_invoice",
+          "tool_name": "fetch_invoice",
+          "tool_arguments": {
+            "order_id": "A-1038"
+          }
+        },
+        {
+          "index": 6,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1038",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 7,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    },
+    {
+      "trace_id": "case-00039",
+      "task": "handle the customer refund request for order A-1039",
+      "final_result": "I have updated your order.",
+      "final_error": null,
+      "has_reference_trace": true,
+      "budget_remaining": 6,
+      "steps": [
+        {
+          "index": 0,
+          "kind": "plan",
+          "summary": "draft a plan for the request",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 1,
+          "kind": "retrieval",
+          "summary": "retrieve the refund policy",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 2,
+          "kind": "tool_call",
+          "summary": "call lookup_order",
+          "tool_name": "lookup_order",
+          "tool_arguments": {
+            "order_id": "A-1039"
+          }
+        },
+        {
+          "index": 3,
+          "kind": "reflect",
+          "summary": "review gathered information",
+          "tool_name": null,
+          "tool_arguments": null
+        },
+        {
+          "index": 4,
+          "kind": "tool_call",
+          "summary": "call check_eligibility",
+          "tool_name": "check_eligibility",
+          "tool_arguments": {
+            "order_id": "A-1039",
+            "days_since_purchase": 18
+          }
+        },
+        {
+          "index": 5,
+          "kind": "tool_call",
+          "summary": "call issue_refund",
+          "tool_name": "issue_refund",
+          "tool_arguments": {
+            "order_id": "A-1039",
+            "amount": 45.0
+          }
+        },
+        {
+          "index": 6,
+          "kind": "final",
+          "summary": "return a response to the customer",
+          "tool_name": null,
+          "tool_arguments": null
+        }
+      ]
+    }
+  ]
+}

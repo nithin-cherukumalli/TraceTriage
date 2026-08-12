@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.env
+data/synthetic_cases/*.jsonl
+results/*/
+
+# harness artefacts are checked in on purpose:
+# features.json, features.lock, PROGRESS.md, sessions/

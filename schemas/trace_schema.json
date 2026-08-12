@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/nitin/agent-diagnosis/schemas/trace_schema.json",
+  "title": "Failed AI-agent execution trace",
+  "description": "One record per failed run. Every field carries an explicit visibility tier in `x-visibility`. VISIBLE = handed to the diagnostic agent for free at episode start. PROBE = revealed only by the named probe, at that probe's cost. HIDDEN = owned by the evaluator; never serialised into an Observation. The tiering here is the experiment: if it drifts, results stop being comparable.",
+  "type": "object",
+  "required": ["trace_id", "task", "steps", "final_result"],
+  "additionalProperties": false,
+  "properties": {
+    "trace_id": {"type": "string", "x-visibility": "VISIBLE"},
+    "task": {
+      "type": "string",
+      "x-visibility": "VISIBLE",
+      "description": "The goal given to the failed agent."
+    },
+    "final_result": {
+      "type": "string",
+      "x-visibility": "VISIBLE",
+      "description": "What the agent ultimately returned. Present even when the run failed."
+    },
+    "final_error": {
+      "type": ["string", "null"],
+      "x-visibility": "VISIBLE",
+      "description": "Surface error, if the run terminated with one. null for silent failures where the agent returned an answer that was simply wrong."
+    },
+    "reference_trace_id": {
+      "type": ["string", "null"],
+      "x-visibility": "VISIBLE_AS_FLAG",
+      "description": "A known-good run of the same task. The diagnostic agent sees only whether one exists; its contents cost a compare_known_good probe."
+    },
+    "steps": {"type": "array", "items": {"$ref": "#/$defs/step"}},
+    "ground_truth": {"$ref": "#/$defs/ground_truth"}
+  },
+  "$defs": {
+    "step": {
+      "type": "object",
+      "required": ["index", "kind", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "index": {"type": "integer", "minimum": 0, "x-visibility": "VISIBLE"},
+        "kind": {
+          "enum": ["plan", "tool_call", "retrieval", "reflect", "final"],
+          "x-visibility": "VISIBLE"
+        },
+        "summary": {
+          "type": "string",
+          "x-visibility": "VISIBLE",
+          "description": "One-line header. Leakage rule L2: generated from kind and surface arguments only. Must never contain diagnostic prose."
+        },
+        "plan_text": {
+          "type": ["string", "null"],
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_plan",
+          "description": "The agent's reasoning. Hidden because reading reasoning is exactly the expensive act being budgeted."
+        },
+        "tool_call": {"oneOf": [{"$ref": "#/$defs/tool_call"}, {"type": "null"}]},
+        "retrieval": {"oneOf": [{"$ref": "#/$defs/retrieval"}, {"type": "null"}]},
+        "replay_record": {
+          "type": ["object", "null"],
+          "x-visibility": "PROBE",
+          "x-probe": "replay_tool_call",
+          "description": "Preserved external observation captured at trace time. null means replay is IMPOSSIBLE here, which is a distinct answer from 'replay agreed'."
+        }
+      }
+    },
+    "tool_call": {
+      "type": "object",
+      "required": ["name", "arguments"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-visibility": "VISIBLE",
+          "description": "Amendment A1 (2026-08-12): tool names are free. Every real tracing UI shows the call signature without further work."
+        },
+        "arguments": {
+          "type": "object",
+          "x-visibility": "VISIBLE",
+          "description": "Amendment A1: argument VALUES are free. Note this is evidence, not a label -- see README 'Evidence vs labels'. It does weaken schema-probe headroom; consequence recorded in research/discussion-record.md."
+        },
+        "schema": {
+          "type": ["object", "null"],
+          "x-visibility": "PROBE",
+          "x-probe": "validate_tool_args",
+          "description": "The tool's DECLARED contract. Hidden: seeing an argument is not the same as knowing what the tool required. This is what schema validation actually costs you."
+        },
+        "raw_output": {
+          "type": ["string", "null"],
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_tool_output"
+        },
+        "status": {
+          "enum": ["ok", "error", "timeout"],
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_tool_output"
+        },
+        "latency_ms": {
+          "type": "integer", "minimum": 0,
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_tool_output"
+        },
+        "http_status": {
+          "type": ["integer", "null"],
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_tool_output"
+        }
+      }
+    },
+    "retrieval": {
+      "type": "object",
+      "required": ["query", "documents"],
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "type": ["string", "null"],
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_context"
+        },
+        "documents": {
+          "type": "array", "items": {"type": "string"},
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_context"
+        },
+        "scores": {
+          "type": "array", "items": {"type": "number"},
+          "x-visibility": "PROBE",
+          "x-probe": "inspect_context"
+        }
+      }
+    },
+    "ground_truth": {
+      "type": "object",
+      "x-visibility": "HIDDEN",
+      "description": "Evaluator-only. Never reachable from an Observation; enforced by an object-graph walk in tests/test_contract.py.",
+      "required": ["mechanism", "family", "root_cause_step", "crash_step", "in_taxonomy"],
+      "additionalProperties": false,
+      "properties": {
+        "mechanism": {
+          "enum": ["H1_planning", "H2_tool", "H3_context", "H4_external", "H5_unknown"],
+          "description": "True failure mechanism. PRIMARY prediction target."
+        },
+        "family": {
+          "type": "string",
+          "description": "Fine-grained fault family. Never predicted; used only for stratified error analysis and for the held-out H5 split."
+        },
+        "root_cause_step": {
+          "type": "integer",
+          "description": "True failure step: the FIRST MEANINGFULLY WRONG step. SECONDARY prediction target."
+        },
+        "crash_step": {
+          "type": "integer",
+          "description": "Where the failure surfaced. Deliberately NOT the prediction target; the gap between the two is what makes localization non-trivial."
+        },
+        "in_taxonomy": {
+          "type": "boolean",
+          "description": "false for held-out families. Escalation is then the only correct action."
+        },
+        "distractor_steps": {
+          "type": "array", "items": {"type": "integer"},
+          "description": "Innocent steps between root cause and crash. Each survives inspection cleanly."
+        },
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

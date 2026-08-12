@@ -1,0 +1,530 @@
+{
+  "$schema": "./feature_schema.json",
+  "project": "agent-diagnosis",
+  "description": "Locked feature ledger. One feature is worked at a time, in dependency order. Locked fields cannot change without bumping lock_version and adding a changelog entry; tests/test_harness.py fails otherwise.",
+  "lock_version": 2,
+  "locked_at": "2026-08-12",
+  "locked_fields": [
+    "id",
+    "area",
+    "title",
+    "why",
+    "depends_on",
+    "acceptance",
+    "verify",
+    "milestone"
+  ],
+  "mutable_fields": [
+    "status",
+    "sessions",
+    "notes",
+    "started_at",
+    "completed_at",
+    "blocked_reason"
+  ],
+  "status_values": [
+    "locked",
+    "in_progress",
+    "blocked",
+    "done",
+    "dropped"
+  ],
+  "policy": {
+    "one_at_a_time": "Exactly one feature may be in_progress. Starting a second is an error.",
+    "definition_of_done": "status=done requires every acceptance item satisfied AND the verify command exiting 0 AND a session log entry referencing the feature id.",
+    "dropping": "A feature may be dropped, never silently deleted. Dropping requires a changelog entry stating why.",
+    "adding": "New features append with the next id and require a lock_version bump."
+  },
+  "changelog": [
+    {
+      "lock_version": 1,
+      "date": "2026-08-12",
+      "change": "Initial lock. 8 completed foundation features recorded for provenance; 14 backlog features derived from research/preregistration.md milestones and the two defects surfaced by the first end-to-end run."
+    },
+    {
+      "lock_version": 2,
+      "date": "2026-08-12",
+      "change": "F-017 (B1 whole-trace LLM) reprioritised ahead of F-010..F-016 at researcher direction. Two locked-field changes: (a) dependency on F-015 removed -- it was over-specified, since B1 needs only the data model (F-002) and the metrics layer (F-005), both done; F-015 consumes B1's output rather than producing anything B1 needs. (b) acceptance extended with three measures the researcher specified: evidence grounding, unsupported explanation rate, confidence calibration. Also narrows the input tier to VISIBLE per researcher spec, which contradicts the pre-registration's 'fully unredacted trace'; both views are implemented and reported, and pre-registration amendment P1 records the tension."
+    }
+  ],
+  "features": [
+    {
+      "id": "F-001",
+      "area": "foundation",
+      "title": "Frozen probe contract and pre-registration",
+      "why": "Freezing probe semantics before the generator exists is the anti-circularity device the whole result rests on. Without a dated artefact there is no defence against the charge that probes were tuned to the corpus.",
+      "depends_on": [],
+      "acceptance": [
+        "research/probe-contract.md exists, is dated before src/trace/synthesize.py, and carries a write-once amendment section",
+        "research/preregistration.md states one primary hypothesis, secondary metrics, baselines, and kill criteria K1-K5",
+        "every amendment to the contract is dated and states its consequence"
+      ],
+      "verify": "test -f research/probe-contract.md && test -f research/preregistration.md",
+      "milestone": "M0",
+      "status": "done",
+      "sessions": [
+        "0001",
+        "0002"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": "Amendment A1 moved tool names and arguments to the visible tier."
+    },
+    {
+      "id": "F-002",
+      "area": "foundation",
+      "title": "Trace data model with a three-tier visibility boundary",
+      "why": "The experiment is meaningless unless the diagnostic agent provably cannot see hidden state. Visibility must be declared as data and enforced by tests, not asserted in prose.",
+      "depends_on": [
+        "F-001"
+      ],
+      "acceptance": [
+        "schemas/trace_schema.json tags every field VISIBLE, PROBE or HIDDEN via x-visibility",
+        "src/trace/models.py mirrors the schema and make_observation() is the only path from Trace to Observation",
+        "a test walks the Observation object graph and asserts GroundTruth is unreachable",
+        "a test asserts the Python visible tier matches the schema's VISIBLE set"
+      ],
+      "verify": "pytest tests/test_contract.py -q -k 'l3 or visible_tier or probe_gated'",
+      "milestone": "M1",
+      "status": "done",
+      "sessions": [
+        "0002",
+        "0003"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": ""
+    },
+    {
+      "id": "F-003",
+      "area": "foundation",
+      "title": "Six-probe catalog implementing the contract",
+      "why": "Probes are the action space. They must be read-only, individually priced, charged even when inapplicable, and incapable of returning a diagnosis.",
+      "depends_on": [
+        "F-001",
+        "F-002"
+      ],
+      "acceptance": [
+        "all six probes registered, one module each, prices frozen in src/probes/base.py",
+        "an inapplicable probe returns ok=False and is charged in full",
+        "no probe mutates the trace",
+        "replay_tool_call can return divergence=unavailable as a first-class answer"
+      ],
+      "verify": "pytest tests/test_contract.py -q -k 'probe'",
+      "milestone": "M1",
+      "status": "done",
+      "sessions": [
+        "0002"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": ""
+    },
+    {
+      "id": "F-004",
+      "area": "foundation",
+      "title": "Episode loop with budget accounting and forced escalation",
+      "why": "The environment must own the trace and hand out only observations. Budget exhaustion has to be an escalation, never a free guess, or probe count stops measuring anything.",
+      "depends_on": [
+        "F-003"
+      ],
+      "acceptance": [
+        "run_episode charges every probe, applicable or not",
+        "budget exhaustion terminates as budget_exhausted with no mechanism",
+        "every episode records an auditable transcript"
+      ],
+      "verify": "pytest tests/test_contract.py -q -k 'budget or charged'",
+      "milestone": "M1",
+      "status": "done",
+      "sessions": [
+        "0002"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": ""
+    },
+    {
+      "id": "F-005",
+      "area": "foundation",
+      "title": "Attribution-primary scoring with escalation-aware accuracy",
+      "why": "Excluding escalations from the denominator lets a policy protect its score by refusing hard cases. Localization must be conditioned on correct attribution so a lucky step guess earns nothing.",
+      "depends_on": [
+        "F-004"
+      ],
+      "acceptance": [
+        "attribution correct = right mechanism, or escalation when the truth is out of taxonomy",
+        "localization scored only over correctly attributed in-taxonomy episodes",
+        "crash_step_confusion reported separately",
+        "paired bootstrap over trace ids with 95% CI"
+      ],
+      "verify": "python -c \"import sys; sys.path.insert(0,'src'); import evaluation.metrics\"",
+      "milestone": "M1",
+      "status": "done",
+      "sessions": [
+        "0003"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": "Replaced an earlier blended cost scalar that required defending a stipulated cost matrix."
+    },
+    {
+      "id": "F-006",
+      "area": "corpus",
+      "title": "Eleven-family synthetic case generator",
+      "why": "Realistic failed traces with ground truth derived from construction rather than annotation. Two families are deliberately invisible to any single probe, which is what makes sequential probing worth studying.",
+      "depends_on": [
+        "F-003"
+      ],
+      "acceptance": [
+        "all eleven families implemented, one template each",
+        "labels are a byproduct of construction; no mechanism name written to any field",
+        "surface errors drawn from a shared ambiguous pool",
+        "silent failures occur in in-taxonomy families too"
+      ],
+      "verify": "python experiments/build_cases.py",
+      "milestone": "M2",
+      "status": "done",
+      "sessions": [
+        "0003",
+        "0004"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": "wrong_tool_selected reclassified H2 -> H1 at the researcher's direction."
+    },
+    {
+      "id": "F-007",
+      "area": "corpus",
+      "title": "Probe-sufficiency verifier by subset search",
+      "why": "Every case must contain evidence reachable through probes, and that is checkable. Checking it by running the policy's belief model conflates corpus quality with policy quality and nearly caused eight sound cases to be rewritten.",
+      "depends_on": [
+        "F-006"
+      ],
+      "acceptance": [
+        "G6 verified by subset existence, not by a full-sweep posterior",
+        "oracle_probes reported per case and in aggregate",
+        "held-out family verified to produce no anomalous signature",
+        "a test fails if either cross-evidence family becomes single-probe solvable"
+      ],
+      "verify": "pytest tests/test_contract.py -q -k 'g6 or cross_evidence or held_out'",
+      "milestone": "M2",
+      "status": "done",
+      "sessions": [
+        "0004"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": "Mean oracle probes 1.22 on the inspection corpus."
+    },
+    {
+      "id": "F-008",
+      "area": "corpus",
+      "title": "Empirical leakage guard: visible-only baseline and G5",
+      "why": "Lexical leakage checks pass while a corpus is broken. The first generator wrote mechanism-specific strings into final_error and a zero-probe baseline reached 0.858 attribution accuracy; only running that baseline caught it.",
+      "depends_on": [
+        "F-006"
+      ],
+      "acceptance": [
+        "VisibleOnlyPolicy implemented as a genuine best use of the visible tier",
+        "G5 rejects any corpus where it exceeds 0.55 attribution accuracy",
+        "build_cases.py reports the number on every run"
+      ],
+      "verify": "python experiments/build_cases.py",
+      "milestone": "M2",
+      "status": "done",
+      "sessions": [
+        "0003",
+        "0004"
+      ],
+      "completed_at": "2026-08-12",
+      "notes": "0.278 on the 400-case corpus, 0.425 on the stratified 40."
+    },
+    {
+      "id": "F-009",
+      "area": "harness",
+      "title": "Harness scaffolding: AGENTS.md, locked feature ledger, session log",
+      "why": "Work spans many sessions with no shared memory. Durable artefacts on disk are the only thing that survives a context window, and an unlocked backlog silently drifts.",
+      "depends_on": [],
+      "acceptance": [
+        "AGENTS.md at repo root states structure, permissions, and verification gates",
+        "harness/features.json validates against harness/feature_schema.json",
+        "the lock hash covers locked fields and a test fails on unnoticed drift",
+        "harness/PROGRESS.md indexes one log file per session",
+        "scripts/harness.py can validate, show status, start and close a session"
+      ],
+      "verify": "python scripts/harness.py check",
+      "milestone": "H1",
+      "status": "done",
+      "sessions": [
+        "0005"
+      ],
+      "started_at": "2026-08-12",
+      "notes": "",
+      "completed_at": "2026-08-12"
+    },
+    {
+      "id": "F-010",
+      "area": "corpus",
+      "title": "Regenerate dev and test corpora under the eleven-family taxonomy",
+      "why": "The only end-to-end run predates the taxonomy revision, and its seeds are burned for diagnostics. Every downstream number is stale until the corpora are rebuilt on a fresh, previously unscored seed.",
+      "depends_on": [
+        "F-007",
+        "F-009"
+      ],
+      "acceptance": [
+        "dev n>=200 and test n>=400 regenerated with allocation=by_mechanism",
+        "G1-G7 pass on both splits",
+        "the E1 test seed is recorded in the pre-registration and has never been scored",
+        "held-out family present in test only"
+      ],
+      "verify": "python experiments/validate_corpus.py",
+      "milestone": "M2",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-011",
+      "area": "policy",
+      "title": "Fix correlated-evidence double counting in the belief update",
+      "why": "The adaptive policy's budget curve is anti-monotone: 0.68 attribution at four probes, 0.61 at six. More evidence makes it worse. That is the fingerprint of naive-Bayes multiplying dependent observations as if independent, and it is the leading suspect for the K1 failure.",
+      "depends_on": [
+        "F-010"
+      ],
+      "acceptance": [
+        "attribution accuracy is non-decreasing in probe budget on the dev split",
+        "accuracy at budget 6 is at least accuracy at budget 4",
+        "the fix is stated in research/discussion-record.md before it is implemented",
+        "no change to the likelihood table is made to chase a test number without a written rationale"
+      ],
+      "verify": "python experiments/run_experiment.py --check-monotone",
+      "milestone": "M4",
+      "status": "locked",
+      "sessions": [],
+      "notes": "Do not tune to win. K1's remedy of 'fix the probes' is the wrong diagnosis here: b2_strong reaches 0.743 on the same probe set, which exonerates the probes."
+    },
+    {
+      "id": "F-012",
+      "area": "policy",
+      "title": "Flat-posterior escalation as a first-class rule",
+      "why": "The adaptive policy escalates on 0% of cases and therefore misses every held-out case. Escalation currently only fires on unmodelled signatures, and clean evidence is all modelled, so the unexplained mass never accumulates.",
+      "depends_on": [
+        "F-011"
+      ],
+      "acceptance": [
+        "escalation triggers on a flat posterior after evidence, not only at budget exhaustion",
+        "escalation recall on held-out cases >= 0.70 on dev",
+        "escalation precision >= 0.60 on dev",
+        "escalating on an in-taxonomy case still counts as incorrect attribution"
+      ],
+      "verify": "python experiments/run_experiment.py --report escalation",
+      "milestone": "M4",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-013",
+      "area": "baseline",
+      "title": "B2-strong: search and report the optimal fixed probe order",
+      "why": "Beating a naive checklist is not a result. The baseline that matters is the best possible non-adaptive ordering, and it must be built before the adaptive policy is tuned so its number is never seen first.",
+      "depends_on": [
+        "F-010"
+      ],
+      "acceptance": [
+        "search runs on the dev split only and the chosen order is recorded in results",
+        "the checklist expands each probe type over all applicable steps, walking back from the crash",
+        "B2-strong and p_adaptive share the same localization read-out",
+        "dev-selected order is applied unchanged to test"
+      ],
+      "verify": "python experiments/run_experiment.py --report baselines",
+      "milestone": "M3",
+      "status": "locked",
+      "sessions": [],
+      "notes": "Partially built; needs its own evaluation pass under the new taxonomy."
+    },
+    {
+      "id": "F-014",
+      "area": "eval",
+      "title": "Oracle probe-count lower bound as a reported baseline",
+      "why": "The subset search already computes the minimum probes needed per case. Reporting adaptive probe economy against that floor is far more informative than reporting it against a fixed procedure alone.",
+      "depends_on": [
+        "F-010"
+      ],
+      "acceptance": [
+        "mean oracle probes reported alongside every policy's mean probes",
+        "an oracle-policy row appears in the results table with attribution 1.0 by construction",
+        "per-family oracle probe counts reported"
+      ],
+      "verify": "python experiments/run_experiment.py --report oracle",
+      "milestone": "M5",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-015",
+      "area": "eval",
+      "title": "Results report: tables, budget curves, paired bootstrap, per-family breakdown",
+      "why": "A results.json nobody reads is not a result. The report is what makes kill criteria checkable by a human in one glance.",
+      "depends_on": [
+        "F-012",
+        "F-013",
+        "F-014"
+      ],
+      "acceptance": [
+        "markdown report emitted to results/<run>/report.md",
+        "every kill criterion K1-K5 evaluated and shown as fired or not",
+        "budget curves for every probing policy",
+        "per-family attribution breakdown with counts"
+      ],
+      "verify": "python experiments/analyze.py --results results/latest",
+      "milestone": "M5",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-016",
+      "area": "eval",
+      "title": "Probe-cost sensitivity sweep",
+      "why": "Probe prices are stipulated, not measured. If the policy ranking flips under a plausible reprice, the headline result is a cost-model artefact and must be reported as one.",
+      "depends_on": [
+        "F-015"
+      ],
+      "acceptance": [
+        "each probe price swept +/-50% independently and jointly",
+        "the policy ranking under each repricing is reported",
+        "any rank flip is stated in the results and in research/discussion-record.md"
+      ],
+      "verify": "python experiments/sensitivity.py",
+      "milestone": "M5",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-017",
+      "area": "baseline",
+      "title": "B1 whole-trace LLM baseline with grounding and calibration measures",
+      "why": "The practitioner claim this project exists to test is that whole-trace LLM diagnosis locks onto a plausible explanation prematurely. Without B1 there is nothing to compare against. Measuring only its accuracy would miss the actual claim, which is about invented evidence and misplaced confidence -- so grounding and calibration are first-class acceptance criteria, not extras.",
+      "depends_on": [
+        "F-002",
+        "F-005"
+      ],
+      "acceptance": [
+        "the formatter takes an Observation, never a Trace, and src/baselines imports nothing from src/probes",
+        "output parsed against the fixed JSON schema; parse failures reported as a metric, never retried away",
+        "mechanism attribution and root-cause localization scored with the existing metrics layer",
+        "evidence grounding: fraction of cited step_ids that exist, reported per run",
+        "unsupported explanation rate: explanations asserting probe-gated values the model never saw",
+        "confidence calibration: ECE and Brier score, with accuracy per confidence decile",
+        "one committed prompt version, temperature 0, no dev-set iteration",
+        "entire test suite still runs offline with MockClient and no API key"
+      ],
+      "verify": "pytest tests/test_baselines.py -q && python experiments/run_baseline_b1.py --client mock",
+      "milestone": "M6",
+      "status": "done",
+      "sessions": [
+        "0006"
+      ],
+      "notes": "If B1 beats p_adaptive, K4 fires and the honest finding is that probing does not pay at this trace length. Report it; do not tune.",
+      "started_at": "2026-08-12",
+      "completed_at": "2026-08-12"
+    },
+    {
+      "id": "F-018",
+      "area": "eval",
+      "title": "H5 evaluation on held-out families",
+      "why": "Unknown-failure handling is a headline claim of the project and is currently unmeasured, because the adaptive policy never escalates.",
+      "depends_on": [
+        "F-012",
+        "F-015"
+      ],
+      "acceptance": [
+        "escalation precision and recall reported per policy on the test split",
+        "at least one additional held-out family added and verified anomaly-free",
+        "no policy has access to the held-out family at dev time"
+      ],
+      "verify": "python experiments/run_experiment.py --report unknown",
+      "milestone": "M7",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-019",
+      "area": "real-data",
+      "title": "TRAIL adapter with a documented lossy mapping table",
+      "why": "Synthetic-only results are a fair reviewer objection. TRAIL supplies human-annotated OpenTelemetry traces with span-level locations, and its lack of preserved observations is itself a finding about tracing infrastructure.",
+      "depends_on": [
+        "F-015"
+      ],
+      "acceptance": [
+        ">=100 real traces loaded into the schema",
+        "docs/mapping_trail.md documents every taxonomy mapping and marks unmappable categories in_taxonomy=false",
+        "replay_tool_call returns unavailable on every TRAIL case and this is reported, not hidden",
+        "results reported even if weaker than synthetic"
+      ],
+      "verify": "pytest tests/test_adapters.py -q",
+      "milestone": "M8",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-020",
+      "area": "real-data",
+      "title": "Who&When adapter",
+      "why": "A second independent real dataset guards against over-fitting conclusions to TRAIL's annotation conventions. Its decisive-step label is external evidence for the root-cause versus crash-step distinction.",
+      "depends_on": [
+        "F-019"
+      ],
+      "acceptance": [
+        "adapter loads multi-agent logs into the schema",
+        "docs/mapping_whowhen.md justifies mapping decisive_step to root_cause_step",
+        "expected high in_taxonomy=false rate reported rather than forced into nearest classes"
+      ],
+      "verify": "pytest tests/test_adapters.py -q -k whowhen",
+      "milestone": "M8",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-021",
+      "area": "infra",
+      "title": "CI verification gate",
+      "why": "A verification loop that only runs when someone remembers is not a verification loop. The checklist requires verification to run automatically on task completion.",
+      "depends_on": [
+        "F-009"
+      ],
+      "acceptance": [
+        "CI runs the test suite, the harness check, and the corpus build on every push",
+        "CI fails on feature-lock drift",
+        "CI is offline: no API keys required"
+      ],
+      "verify": "python scripts/harness.py check && pytest -q",
+      "milestone": "H1",
+      "status": "locked",
+      "sessions": [],
+      "notes": ""
+    },
+    {
+      "id": "F-022",
+      "area": "eval",
+      "title": "E1: the pre-registered experiment, run once",
+      "why": "The whole project resolves to this single run. It is deliberately last: touching the test split before the pipeline is frozen destroys the pre-registration.",
+      "depends_on": [
+        "F-016",
+        "F-017",
+        "F-018",
+        "F-021"
+      ],
+      "acceptance": [
+        "test split touched exactly once, on a seed never previously scored",
+        "PH1 evaluated with a paired bootstrap and a 95% CI",
+        "every kill criterion reported whether or not it fired",
+        "the result is written up in paper/ even if PH1 fails"
+      ],
+      "verify": "python experiments/run_experiment.py --preregistered",
+      "milestone": "M5",
+      "status": "locked",
+      "sessions": [],
+      "notes": "No tuning after this point. If PH1 fails, that is the paper."
+    }
+  ]
+}

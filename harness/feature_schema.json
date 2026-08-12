@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Locked feature ledger",
+  "description": "Validated by scripts/harness.py and tests/test_harness.py. The point of the schema is that a malformed or under-specified feature cannot be added quietly: every feature must carry acceptance criteria and a runnable verify command.",
+  "type": "object",
+  "required": ["project", "lock_version", "locked_fields", "mutable_fields", "changelog", "features"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "project": {"type": "string"},
+    "description": {"type": "string"},
+    "lock_version": {"type": "integer", "minimum": 1},
+    "locked_at": {"type": "string"},
+    "locked_fields": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "mutable_fields": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "status_values": {"type": "array", "items": {"type": "string"}},
+    "policy": {"type": "object"},
+    "changelog": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["lock_version", "date", "change"],
+        "properties": {
+          "lock_version": {"type": "integer"},
+          "date": {"type": "string"},
+          "change": {"type": "string", "minLength": 20}
+        }
+      }
+    },
+    "features": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "area", "title", "why", "depends_on", "acceptance", "verify", "milestone", "status", "sessions"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^F-[0-9]{3}$"},
+          "area": {"enum": ["foundation", "corpus", "policy", "baseline", "eval", "real-data", "infra", "harness"]},
+          "title": {"type": "string", "minLength": 8},
+          "why": {"type": "string", "minLength": 40,
+                  "description": "Not a restatement of the title. Why this is worth doing and what breaks without it."},
+          "depends_on": {"type": "array", "items": {"type": "string", "pattern": "^F-[0-9]{3}$"}},
+          "acceptance": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 10},
+                         "description": "Checkable statements. If it cannot be checked it is not acceptance, it is a wish."},
+          "verify": {"type": "string", "minLength": 4,
+                     "description": "A command the agent can run itself. Human review is not a verification gate."},
+          "milestone": {"type": "string"},
+          "status": {"enum": ["locked", "in_progress", "blocked", "done", "dropped"]},
+          "sessions": {"type": "array", "items": {"type": "string", "pattern": "^[0-9]{4}$"}},
+          "started_at": {"type": "string"},
+          "completed_at": {"type": "string"},
+          "blocked_reason": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

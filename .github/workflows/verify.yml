@@ -1,0 +1,42 @@
+name: verify
+
+# The verification loop must run without anyone remembering to run it
+# (HARNESS_CHECKLIST.md -> Verification loop). Offline by construction: no API keys,
+# no network, so a fork or a scheduled run behaves identically.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Harness check (schema, feature lock, dependency order, one-at-a-time)
+        run: python scripts/harness.py check
+
+      - name: Test suite
+        run: pytest -q
+
+      - name: Corpus gates G1-G7
+        run: python experiments/build_cases.py
+
+      - name: Progress index is current
+        run: |
+          python scripts/harness.py check
+          git diff --exit-code -- harness/PROGRESS.md \
+            || (echo "::error::PROGRESS.md is stale — run 'python scripts/harness.py check' and commit" && exit 1)
+
+      - name: Ledger status
+        if: always()
+        run: python scripts/harness.py status
